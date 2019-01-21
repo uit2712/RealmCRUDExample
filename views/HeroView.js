@@ -6,8 +6,10 @@
  * @flow
  */
 
-import React, {Component} from 'react';
-import { StyleSheet, View} from 'react-native';
+import React, { Component } from 'react';
+import { StyleSheet, View, Text, } from 'react-native';
+import IconMaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import IconFontAwesome from 'react-native-vector-icons/FontAwesome';
 
 export default class HeroView extends Component<Props> {
     constructor(props: Props) {
@@ -24,7 +26,20 @@ export default class HeroView extends Component<Props> {
 
         return (
             <View style={styles.container}>
-                <Text>{this.state.hero.heroName}</Text>
+                <IconMaterialCommunityIcons
+                    style={styles.icon}
+                    name='delete-circle'
+                    size={30}
+                    color='red'
+                    onPress={() => {}}/>
+                <IconFontAwesome
+                    style={styles.icon}
+                    name='edit'
+                    size={30}
+                    color='green'
+                    onPress={() => {}}
+                />
+                <Text style={styles.generalFontSize}>{this.state.hero.heroName}</Text>
             </View>
         );
     }
@@ -33,8 +48,16 @@ export default class HeroView extends Component<Props> {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#F5FCFF',
+        flexDirection: 'row',
+        width: '100%',
+        height: 50,
+    },
+    generalFontSize: {
+        fontSize: 20,
+    },
+    icon: {
+        marginHorizontal: 10,
     },
 });
