@@ -9,23 +9,11 @@ export default class Hero {
         this.powers = powers;
     }
 
-    getPowersArrayInfo() {
-        if (!(this.powers instanceof Array) || this.powers.length == 0)
-            return [];
-
-        let result = [];
-        for (let i = 0; i < this.powers.length; i++)
-            if (this.powers[i])
-                result.push(this.powers[i].getObjectInfo());
-
-        return result;
-    }
-
     getObjectInfo() {
         return {
             heroId: this.heroId,
             heroName: this.heroName,
-            powers: this.getPowersArrayInfo()
+            powers: this.powers
         }
     }
 }
