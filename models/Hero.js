@@ -16,6 +16,10 @@ export default class Hero {
             powers: this.powers
         }
     }
+
+    clone() {
+        return new Hero(this.heroId, this.heroName, this.powers);
+    }
 }
 
 const HeroSchema = {
