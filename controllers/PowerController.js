@@ -48,7 +48,6 @@ const generateId = () => {
 }
 
 const checkIfExist = (id: number) => {
-    console.log(getPowerById(id).result);
     return getPowerById(id).result != null;
 }
 

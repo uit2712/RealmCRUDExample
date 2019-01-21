@@ -12,9 +12,12 @@ import {
     View,
     TextInput,
     Text,
+    Keyboard,
+    ToastAndroid,
 } from 'react-native';
 import CustomButton from './CustomButton';
 import Hero from '../models/Hero';
+import { createNewHero } from '../controllers/HeroController';
 
 export default class CreateHeroView extends Component<Props> {
     constructor(props: Props) {
@@ -22,6 +25,7 @@ export default class CreateHeroView extends Component<Props> {
 
         this.state = {
             hero: new Hero(),
+            event: this.props.event,
             disableButtonAdd: true,
         }
     }
@@ -32,6 +36,24 @@ export default class CreateHeroView extends Component<Props> {
         if (heroName == null || ''.includes(heroName))
             this.setState({ hero, disableButtonAdd: true });
         else this.setState({ hero, disableButtonAdd: false });
+    }
+
+    resetHeroInfo = () => {
+        this.setState({ hero: new Hero(), disableButtonAdd: true });
+        Keyboard.dismiss();
+    }
+
+    createHero = () => {
+        if (!this.state.hero || this.state.disableButtonAdd)
+            return;
+
+        let createHeroResult = createNewHero(this.state.hero);
+        ToastAndroid.show(createHeroResult.message, ToastAndroid.SHORT);
+        if (createHeroResult.result) {
+            this.resetHeroInfo();
+            if (this.state.event)
+                this.state.event.emit('onUpdateHero');
+        }
     }
 
     render() {
@@ -46,11 +68,11 @@ export default class CreateHeroView extends Component<Props> {
                         style={[styles.input, styles.generalFontSize]}
                         value={this.state.hero.heroName}
                         onChangeText={(text) => this.setHeroName(text)}
-                        onSubmitEditing={() => {}} />
+                        onSubmitEditing={this.createHero} />
                     <CustomButton
                         title='Create'
                         width={'20%'}
-                        onPress={() => {}}
+                        onPress={this.createHero}
                         disabled={this.state.disableButtonAdd}
                         enableColor='#841584'
                         disabledColor='#f76df7' />

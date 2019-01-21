@@ -12,6 +12,7 @@ import { getAllHeroes } from '../controllers/HeroController';
 import Hero from '../models/Hero';
 import HeroView from './HeroView';
 import CreateHeroView from './CreateHeroView';
+import EventEmitter from 'events';
 
 export default class ListHeroesView extends Component<Props> {
 
@@ -19,12 +20,35 @@ export default class ListHeroesView extends Component<Props> {
         title: 'List heroes',
     };
 
+    constructor(props: Props) {
+        super(props);
+
+        this.state = {
+            heroes: [],
+        };
+
+        this.updateEvent = new EventEmitter();
+    }
+
+    initHeroes = () => {
+        this.setState({ heroes: getAllHeroes().result });
+    }
+
+    componentWillMount() {
+        this.initHeroes();
+        this.updateEvent.addListener('onUpdateHero', () => this.initHeroes());
+    }
+
+    componentWillUnmount() {
+        this.updateEvent.removeAllListeners();
+    }
+
     showListHeroes = () => {
         let result;
-        let heroes = getAllHeroes().result;
-        result = heroes.map((hero: any) =>
-            <HeroView key={hero['heroId']} hero={new Hero(hero['heroId'], hero['heroName'], hero['powers'])}/>
-        )
+        result = this.state.heroes.map((hero: any) => {
+            let newHero = new Hero(hero['heroId'], hero['heroName'], hero['powers']);
+            return <HeroView key={newHero.heroId} hero={newHero}/>
+        });
 
         return <ScrollView style={styles.listViewContainer}>{result}</ScrollView>
     }
@@ -32,7 +56,7 @@ export default class ListHeroesView extends Component<Props> {
     render() {
         return (
             <View style={styles.container}>
-                <CreateHeroView/>
+                <CreateHeroView event={this.updateEvent}/>
                 {this.showListHeroes()}
             </View>
         );
