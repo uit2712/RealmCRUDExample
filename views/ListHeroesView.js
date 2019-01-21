@@ -6,11 +6,12 @@
  * @flow
  */
 
-import React, {Component} from 'react';
-import { StyleSheet, View} from 'react-native';
+import React, { Component } from 'react';
+import { StyleSheet, View, ScrollView, } from 'react-native';
 import { getAllHeroes } from '../controllers/HeroController';
 import Hero from '../models/Hero';
 import HeroView from './HeroView';
+import CreateHeroView from './CreateHeroView';
 
 export default class ListHeroesView extends Component<Props> {
 
@@ -21,16 +22,17 @@ export default class ListHeroesView extends Component<Props> {
     showListHeroes = () => {
         let result;
         let heroes = getAllHeroes().result;
-        result = heroes.map((hero: Hero) => 
-            <HeroView hero={hero}/>
+        result = heroes.map((hero: any) =>
+            <HeroView key={hero['heroId']} hero={new Hero(hero['heroId'], hero['heroName'], hero['powers'])}/>
         )
 
-        return result;
+        return <ScrollView style={styles.listViewContainer}>{result}</ScrollView>
     }
 
     render() {
         return (
             <View style={styles.container}>
+                <CreateHeroView/>
                 {this.showListHeroes()}
             </View>
         );
@@ -43,5 +45,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#F5FCFF',
+    },
+    listViewContainer: {
+        flex: 1,
+        width: '100%',
     },
 });
