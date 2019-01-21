@@ -53,30 +53,6 @@ export default class ListPowersView extends Component<Props> {
         return <ScrollView style={styles.listViewContainer}>{result}</ScrollView>
     }
 
-    displayModalUpdate = () => {
-        return (
-        <Modal
-          animationType="slide"
-          transparent={false}
-          visible={this.state.updating}
-          onRequestClose={() => {
-            Alert.alert('Modal has been closed.');
-          }}>
-          <View style={{marginTop: 22}}>
-            <View>
-              <Text>Hello World!</Text>
-
-              <TouchableHighlight
-                onPress={() => {
-                  this.setState({ updating: !this.state.updating });
-                }}>
-                <Text>Hide Modal</Text>
-              </TouchableHighlight>
-            </View>
-          </View>
-        </Modal>);
-    }
-
     render() {
         return (
             <View style={styles.container}>
