@@ -20,6 +20,14 @@ export default class Hero {
     clone() {
         return new Hero(this.heroId, this.heroName, this.powers);
     }
+
+    updateInfoForObject(hero: any) {
+        if (!hero)
+            return;
+
+        hero['heroName'] = this.heroName;
+        hero['powers'] = this.powers;
+    }
 }
 
 const HeroSchema = {

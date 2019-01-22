@@ -79,3 +79,32 @@ export const createNewHero = (hero: Hero) => {
         return result;
     }
 }
+
+export const updateHero = (hero: Hero) => {
+    let result = new Message();
+    if (!hero) {
+        result.result = false;
+        result.message = 'Invalid hero data!';
+        return result;
+    }
+
+    let findHero = getHeroById(hero.heroId).result;
+    if (!findHero) {
+        result.result = false;
+        result.message = `Hero with Id=${hero.heroId} doesn't exist`;
+        return result;
+    }
+
+    try {
+        realm.write(() => {
+            hero.updateInfoForObject(findHero);
+        });
+        result.result = true;
+        result.message = `Update hero with Id=${hero.heroId} successful!`;
+    } catch (e) {
+        result.result = false;
+        result.message = `${e.message}`;
+    } finally {
+        return result;
+    }
+}
