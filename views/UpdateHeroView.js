@@ -11,6 +11,7 @@ import { StyleSheet, View, TextInput, Text, ToastAndroid } from 'react-native';
 import CustomButton from './CustomButton';
 import CustomPicker from './CustomPicker';
 import { getAllPowers } from '../controllers/PowerController';
+import EventEmitter from 'events';
 
 export default class UpdateHeroView extends Component<Props> {
 
@@ -33,6 +34,8 @@ export default class UpdateHeroView extends Component<Props> {
             heroPowers: [],
             disabledButtonUpdate: false,
         };
+
+        this.event = new EventEmitter();
     }
 
     initHeroPowersArray = () => {
@@ -57,6 +60,15 @@ export default class UpdateHeroView extends Component<Props> {
     componentWillMount() {
         this.initAllPowersArray();
         this.initHeroPowersArray();
+        this.event.addListener('onUpdatePicker', (pickerIndex, selectedValue) => this.updatePicker(pickerIndex, selectedValue));
+    }
+
+    updatePicker = (pickerIndex: number, selectedValue: number) => {
+        let heroPowers = this.state.heroPowers;
+        if (pickerIndex >= 0 && pickerIndex < heroPowers.length) {
+            heroPowers[pickerIndex] = selectedValue;
+            this.setState({ heroPowers });
+        }
     }
 
     updateName = (name: string) => {
@@ -114,13 +126,15 @@ export default class UpdateHeroView extends Component<Props> {
     displayListHeroPowers = () => {
         let result;
         let powersPickerData = this.getPickerItemData();
-        result = this.state.heroPowers.map((powerId: number) => {
+        result = this.state.heroPowers.map((powerId: number, key: number) => {
             return  (
                 <CustomPicker
-                    key={powerId}
+                    key={key}
                     data={powersPickerData}
+                    pickerIndex={key}
                     title="Hero power:"
                     selectedValue={powerId}
+                    event={this.event}
                 />
             )
         });

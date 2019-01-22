@@ -16,6 +16,8 @@ export default class CustomPicker extends Component<Props> {
             data: this.props.data || [],
             title: this.props.title || "Default picker title:",
             selectedValue: this.props.selectedValue || -1,
+            event: this.props.event,
+            pickerIndex: this.props.pickerIndex,
         };
     }
 
@@ -24,7 +26,14 @@ export default class CustomPicker extends Component<Props> {
             data: nextProps.data,
             title: nextProps.title,
             selectedValue: nextProps.selectedValue,
+            pickerIndex: this.props.pickerIndex,
         });
+    }
+
+    changeValue = (itemValue, itemIndex) => {
+        this.setState({selectedValue: itemValue});
+        if (this.state.event)
+            this.state.event.emit('onUpdatePicker', this.state.pickerIndex, itemValue);
     }
 
     renderPickerData = () => {
@@ -44,9 +53,7 @@ export default class CustomPicker extends Component<Props> {
                 style={[styles.pickerContainer]}
                 textStyle={styles.generalFontSize}
                 selectedValue={this.state.selectedValue}
-                onValueChange={(itemValue, itemIndex) => {
-                    this.setState({selectedValue: itemValue});
-                }}
+                onValueChange={(itemValue, itemIndex) => this.changeValue(itemValue, itemIndex)}
             >
                 {pickerItems}
             </Picker>
