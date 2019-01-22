@@ -6,9 +6,11 @@
  * @flow
  */
 
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import { StyleSheet, View, TextInput, Text, ToastAndroid } from 'react-native';
 import CustomButton from './CustomButton';
+import CustomPicker from './CustomPicker';
+import { getAllPowers } from '../controllers/PowerController';
 
 export default class UpdateHeroView extends Component<Props> {
 
@@ -27,8 +29,34 @@ export default class UpdateHeroView extends Component<Props> {
 
         this.state = {
             hero: hero,
+            powers: getAllPowers().result, // all current powers
+            heroPowers: [],
             disabledButtonUpdate: false,
         };
+    }
+
+    initHeroPowersArray = () => {
+        if (!this.state.hero)
+            return;
+
+        let heroPowers = [];
+        for (let i = 0; i < this.state.hero.powers.length; i++) {
+            let powerId = this.state.hero.powers[i]['powerId'];
+            if (powerId != null && powerId != undefined)
+                heroPowers.push(powerId);
+        }
+
+
+        this.setState({ heroPowers });
+    }
+
+    initAllPowersArray = () => {
+        this.setState({ powers: getAllPowers().result });
+    }
+
+    componentWillMount() {
+        this.initAllPowersArray();
+        this.initHeroPowersArray();
     }
 
     updateName = (name: string) => {
@@ -45,12 +73,12 @@ export default class UpdateHeroView extends Component<Props> {
         }
     }
 
-    render() {
+    displayHeroNameAndId = () => {
         if (!this.state.hero)
-            return <Text>Invalid hero!</Text>
+            return null;
 
         return (
-            <View style={styles.container}>
+            <View style={styles.heroNameAndId}>
                 <View style={styles.infoContainer}>
                     <Text style={[styles.generalFontSize, styles.inputTitle]}>Hero id:</Text>
                     <TextInput style={[styles.generalFontSize, styles.input]} value={`${this.state.hero.heroId}`} editable={false}/>
@@ -63,6 +91,69 @@ export default class UpdateHeroView extends Component<Props> {
                         onChangeText={(text) => this.updateName(text)}
                     />
                 </View>
+            </View>
+        );
+    }
+
+    getPickerItemData = () => {
+        let powersPickerData = [];
+
+        if (this.state.powers) {
+            for (let i = 0; i < this.state.powers.length; i++) {
+                if (this.state.powers[i])
+                    powersPickerData.push({
+                        label: this.state.powers[i]['powerName'],
+                        value: this.state.powers[i]['powerId']
+                    })
+            }
+        }
+
+        return powersPickerData;
+    }
+
+    displayListHeroPowers = () => {
+        let result;
+        let powersPickerData = this.getPickerItemData();
+        result = this.state.heroPowers.map((powerId: number) => {
+            return  (
+                <CustomPicker
+                    key={powerId}
+                    data={powersPickerData}
+                    title="Hero power:"
+                    selectedValue={powerId}
+                />
+            )
+        });
+
+        return result;
+    }
+
+    addNewPower = () => {
+        if (this.state.powers.length <= 0)
+            return;
+
+        let heroPowers = this.state.heroPowers;
+        let powerId = this.state.powers[0]['powerId'];
+        if (powerId != null && powerId != undefined) {
+            heroPowers.push(powerId);
+            this.setState({ heroPowers });
+        }
+    }
+
+    render() {
+        if (!this.state.hero)
+            return <Text>Invalid hero!</Text>
+
+        return (
+            <View style={styles.container}>
+                { this.displayHeroNameAndId() }
+                { this.displayListHeroPowers() }
+                <CustomButton
+                    title='Add more power'
+                    enableColor='green'
+                    disabledColor='#7bf19e'
+                    onPress={this.addNewPower}
+                />
                 <CustomButton
                     title='Update'
                     disabled={this.state.disabledButtonUpdate}
@@ -83,6 +174,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#F5FCFF',
         width: '90%',
         alignSelf: 'center',
+        marginHorizontal: 10,
     },
     generalFontSize: {
         fontSize: 20,
@@ -93,12 +185,15 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         flexDirection: 'row',
     },
+    pickerContainer: {
+        width: '100%',
+    },
     input: {
-        width: '65%',
+        width: '70%',
         borderBottomColor: '#841584',
         borderBottomWidth: 1,
     },
     inputTitle: {
-        width: '35%',
+        width: '30%',
     },
 });
