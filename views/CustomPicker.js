@@ -36,6 +36,11 @@ export default class CustomPicker extends Component<Props> {
             this.state.event.emit('onUpdatePicker', this.state.pickerIndex, itemValue);
     }
 
+    deleteCurrentPicker = () => {
+        if (this.state.event)
+            this.state.event.emit('onDeletePicker', this.state.pickerIndex);
+    }
+
     renderPickerData = () => {
         let pickerItems;
 
@@ -70,7 +75,7 @@ export default class CustomPicker extends Component<Props> {
                     name='delete-circle'
                     size={30}
                     color='red'
-                    onPress={() => {}}
+                    onPress={this.deleteCurrentPicker}
                 />
             </View>
         )

@@ -15,6 +15,7 @@ import EventEmitter from 'events';
 
 export default class UpdateHeroView extends Component<Props> {
 
+
     static navigationOptions = {
         title: 'Update hero',
     };
@@ -36,6 +37,7 @@ export default class UpdateHeroView extends Component<Props> {
         };
 
         this.event = new EventEmitter();
+        this.currentPickerIndex = 0;
     }
 
     initHeroPowersArray = () => {
@@ -61,12 +63,25 @@ export default class UpdateHeroView extends Component<Props> {
         this.initAllPowersArray();
         this.initHeroPowersArray();
         this.event.addListener('onUpdatePicker', (pickerIndex, selectedValue) => this.updatePicker(pickerIndex, selectedValue));
+        this.event.addListener('onDeletePicker', (pickerIndex) => this.deletePicker(pickerIndex));
+    }
+
+    componentWillUnmount() {
+        this.event.removeAllListeners();
     }
 
     updatePicker = (pickerIndex: number, selectedValue: number) => {
         let heroPowers = this.state.heroPowers;
         if (pickerIndex >= 0 && pickerIndex < heroPowers.length) {
             heroPowers[pickerIndex] = selectedValue;
+            this.setState({ heroPowers });
+        }
+    }
+
+    deletePicker = (pickerIndex: number) => {
+        let heroPowers = this.state.heroPowers;
+        if (pickerIndex >= 0 && pickerIndex < heroPowers.length) {
+            heroPowers.splice(pickerIndex, 1);
             this.setState({ heroPowers });
         }
     }
@@ -127,9 +142,10 @@ export default class UpdateHeroView extends Component<Props> {
         let result;
         let powersPickerData = this.getPickerItemData();
         result = this.state.heroPowers.map((powerId: number, key: number) => {
+            this.currentPickerIndex = this.currentPickerIndex + 1;
             return  (
                 <CustomPicker
-                    key={key}
+                    key={this.currentPickerIndex}
                     data={powersPickerData}
                     pickerIndex={key}
                     title="Hero power:"
