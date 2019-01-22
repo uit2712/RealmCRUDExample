@@ -108,3 +108,27 @@ export const updateHero = (hero: Hero) => {
         return result;
     }
 }
+
+export const deleteHeroById = (id: number) => {
+    let result = new Message();
+    let findHero = getHeroById(id).result;
+    if (!findHero) {
+        // not found hero with id
+        result.result = false;
+        result.message = `Hero with Id=${id} doesn't exist`;
+        return result;
+    }
+
+    try {
+        realm.write(() => {
+            realm.delete(findHero);
+        });
+        result.result = true;
+        result.message = `Delete hero with Id=${id} successful!`;
+    } catch (e) {
+        result.result = false;
+        result.message = `${e.message}`;
+    } finally {
+        return result;
+    }
+}

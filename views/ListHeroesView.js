@@ -27,7 +27,7 @@ export default class ListHeroesView extends Component<Props> {
             heroes: [],
         };
 
-        this.updateEvent = new EventEmitter();
+        this.event = new EventEmitter();
     }
 
     initHeroes = () => {
@@ -36,18 +36,19 @@ export default class ListHeroesView extends Component<Props> {
 
     componentWillMount() {
         this.initHeroes();
-        this.updateEvent.addListener('onUpdateHero', () => this.initHeroes());
+        this.event.addListener('onUpdateHero', () => this.initHeroes());
+        this.event.addListener('onDeleteHero', () => this.initHeroes());
     }
 
     componentWillUnmount() {
-        this.updateEvent.removeAllListeners();
+        this.event.removeAllListeners();
     }
 
     showListHeroes = () => {
         let result;
         result = this.state.heroes.map((hero: any) => {
             let newHero = new Hero(hero['heroId'], hero['heroName'], hero['powers']);
-            return <HeroView key={newHero.heroId} hero={newHero}/>
+            return <HeroView key={newHero.heroId} hero={newHero} event={this.event}/>
         });
 
         return <ScrollView style={styles.listViewContainer}>{result}</ScrollView>
@@ -56,7 +57,7 @@ export default class ListHeroesView extends Component<Props> {
     render() {
         return (
             <View style={styles.container}>
-                <CreateHeroView event={this.updateEvent}/>
+                <CreateHeroView event={this.event}/>
                 {this.showListHeroes()}
             </View>
         );
