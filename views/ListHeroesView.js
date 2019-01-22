@@ -6,11 +6,13 @@
  * @flow
  */
 
-import React, {Component} from 'react';
-import { StyleSheet, View} from 'react-native';
+import React, { Component } from 'react';
+import { StyleSheet, View, ScrollView, } from 'react-native';
 import { getAllHeroes } from '../controllers/HeroController';
 import Hero from '../models/Hero';
 import HeroView from './HeroView';
+import CreateHeroView from './CreateHeroView';
+import EventEmitter from 'events';
 
 export default class ListHeroesView extends Component<Props> {
 
@@ -18,19 +20,44 @@ export default class ListHeroesView extends Component<Props> {
         title: 'List heroes',
     };
 
+    constructor(props: Props) {
+        super(props);
+
+        this.state = {
+            heroes: [],
+        };
+
+        this.event = new EventEmitter();
+    }
+
+    initHeroes = () => {
+        this.setState({ heroes: getAllHeroes().result });
+    }
+
+    componentWillMount() {
+        this.initHeroes();
+        this.event.addListener('onUpdateHero', () => this.initHeroes());
+        this.event.addListener('onDeleteHero', () => this.initHeroes());
+    }
+
+    componentWillUnmount() {
+        this.event.removeAllListeners();
+    }
+
     showListHeroes = () => {
         let result;
-        let heroes = getAllHeroes().result;
-        result = heroes.map((hero: Hero) => 
-            <HeroView hero={hero}/>
-        )
+        result = this.state.heroes.map((hero: any) => {
+            let newHero = new Hero(hero['heroId'], hero['heroName'], hero['powers']);
+            return <HeroView key={newHero.heroId} hero={newHero} event={this.event}/>
+        });
 
-        return result;
+        return <ScrollView style={styles.listViewContainer}>{result}</ScrollView>
     }
 
     render() {
         return (
             <View style={styles.container}>
+                <CreateHeroView event={this.event}/>
                 {this.showListHeroes()}
             </View>
         );
@@ -43,5 +70,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#F5FCFF',
+    },
+    listViewContainer: {
+        flex: 1,
+        width: '100%',
     },
 });

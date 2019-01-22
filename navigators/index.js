@@ -4,12 +4,14 @@ import HomeView from '../views/HomeView';
 import ListHeroesView from '../views/ListHeroesView';
 import ListPowersView from '../views/ListPowersView';
 import UpdatePowerView from '../views/UpdatePowerView';
+import UpdateHeroView from '../views/UpdateHeroView';
 
 const StackHero = createStackNavigator({
     Home: { screen: HomeView },
     ListHeroes: { screen: ListHeroesView },
     ListPowers: { screen: ListPowersView },
-    UpdatePower: { screen: UpdatePowerView }
+    UpdatePower: { screen: UpdatePowerView },
+    UpdateHero: { screen: UpdateHeroView },
 });
 
 const StackHeroContainer = createAppContainer(StackHero);
