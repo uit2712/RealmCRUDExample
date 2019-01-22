@@ -10,8 +10,10 @@ import React, { Component } from 'react';
 import { StyleSheet, View, TextInput, Text, ToastAndroid } from 'react-native';
 import CustomButton from './CustomButton';
 import CustomPicker from './CustomPicker';
-import { getAllPowers } from '../controllers/PowerController';
+import { getAllPowers, getPowerById } from '../controllers/PowerController';
+import { updateHero } from '../controllers/HeroController';
 import EventEmitter from 'events';
+import Hero from '../models/Hero';
 
 export default class UpdateHeroView extends Component<Props> {
 
@@ -170,6 +172,27 @@ export default class UpdateHeroView extends Component<Props> {
         }
     }
 
+    getUniqueValueArray = (array: []) => {
+        let result = [];
+        for (let i = 0; i < array.length; i++)
+            if (result.indexOf(array[i]) == -1)
+                result.push(array[i]);
+
+        return result;
+    }
+
+    updateHero = () => {
+        let hero = this.state.hero;
+        let heroPowers = this.getUniqueValueArray(this.state.heroPowers);
+        hero.powers = heroPowers.map((powerId: number) => {
+            let power = getPowerById(powerId).result;
+            if (power)
+                return power;
+        });
+        let updateHeroResult = updateHero(hero);
+        ToastAndroid.show(updateHeroResult.message, ToastAndroid.SHORT);
+    }
+
     render() {
         if (!this.state.hero)
             return <Text>Invalid hero!</Text>
@@ -189,7 +212,7 @@ export default class UpdateHeroView extends Component<Props> {
                     disabled={this.state.disabledButtonUpdate}
                     enableColor='#841584'
                     disabledColor='#f76df7'
-                    onPress={() => {}}
+                    onPress={this.updateHero}
                 />
             </View>
         );
