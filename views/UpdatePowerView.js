@@ -19,12 +19,11 @@ export default class UpdatePowerView extends Component<Props> {
     constructor(props: Props) {
         super(props);
 
-        let power, event;
+        let power;
         if (this.props.navigation
             && this.props.navigation.state
             && this.props.navigation.state.params) {
                 power = this.props.navigation.state.params.power;
-                event = this.props.navigation.state.params.event;
             }
 
         this.state = {
