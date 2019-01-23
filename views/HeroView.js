@@ -26,7 +26,7 @@ class HeroView extends Component<Props> {
             return;
 
         const { navigate } = this.props.navigation;
-        navigate('UpdateHero', { hero: this.state.hero.clone() });
+        navigate('UpdateHero', { hero: this.state.hero });
     }
 
     deleteHero = () => {

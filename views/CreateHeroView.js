@@ -29,6 +29,9 @@ export default class CreateHeroView extends Component<Props> {
     }
 
     setHeroName = (heroName: string) => {
+        if (!this.state.hero)
+            return;
+
         let hero = this.state.hero;
         hero.heroName = heroName;
         if (heroName == null || ''.includes(heroName))

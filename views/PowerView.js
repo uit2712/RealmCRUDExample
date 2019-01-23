@@ -34,7 +34,7 @@ class PowerView extends Component<Props> {
             return;
 
         const { navigate } = this.props.navigation;
-        navigate('UpdatePower', { power: this.state.power.clone() });
+        navigate('UpdatePower', { power: this.state.power });
     }
 
     render() {

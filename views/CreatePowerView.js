@@ -30,6 +30,9 @@ export default class CreatePowerView extends Component<Props> {
     }
 
     setPowerName = (powerName: string) => {
+        if (!this.state.power)
+            return;
+
         let power = this.state.power;
         power.powerName = powerName;
         if (powerName == null || ''.includes(powerName))
