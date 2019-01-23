@@ -16,7 +16,6 @@ export default class CustomPicker extends Component<Props> {
             data: this.props.data || [],
             title: this.props.title || "Default picker title:",
             selectedValue: this.props.selectedValue || -1,
-            event: this.props.event,
             pickerIndex: this.props.pickerIndex,
         };
     }
@@ -26,19 +25,16 @@ export default class CustomPicker extends Component<Props> {
             data: nextProps.data,
             title: nextProps.title,
             selectedValue: nextProps.selectedValue,
-            pickerIndex: this.props.pickerIndex,
+            pickerIndex: nextProps.pickerIndex,
         });
     }
 
     changeValue = (itemValue, itemIndex) => {
         this.setState({selectedValue: itemValue});
-        if (this.state.event)
-            this.state.event.emit('onUpdatePicker', this.state.pickerIndex, itemValue);
     }
 
     deleteCurrentPicker = () => {
-        if (this.state.event)
-            this.state.event.emit('onDeletePicker', this.state.pickerIndex);
+
     }
 
     renderPickerData = () => {

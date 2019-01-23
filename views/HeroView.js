@@ -11,7 +11,6 @@ import { StyleSheet, View, Text, ToastAndroid } from 'react-native';
 import IconMaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import IconFontAwesome from 'react-native-vector-icons/FontAwesome';
 import { withNavigation } from 'react-navigation';
-import { deleteHeroById } from '../controllers/HeroController';
 
 class HeroView extends Component<Props> {
     constructor(props: Props) {
@@ -19,7 +18,6 @@ class HeroView extends Component<Props> {
 
         this.state = {
             hero: this.props.hero,
-            event: this.props.event,
         }
     }
 
@@ -32,13 +30,7 @@ class HeroView extends Component<Props> {
     }
 
     deleteHero = () => {
-        if (!this.state.hero)
-            return;
 
-        let deleteHeroResult = deleteHeroById(this.state.hero.heroId);
-        ToastAndroid.show(deleteHeroResult.message, ToastAndroid.SHORT);
-        if (deleteHeroResult.result && this.state.event)
-            this.state.event.emit('onDeleteHero');
     }
 
     render() {

@@ -10,7 +10,6 @@ import React, { Component } from 'react';
 import { StyleSheet, View, Text, ToastAndroid } from 'react-native';
 import IconMaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import IconFontAwesome from 'react-native-vector-icons/FontAwesome';
-import { deletePowerById } from '../controllers/PowerController';
 import { withNavigation } from 'react-navigation';
 
 class PowerView extends Component<Props> {
@@ -19,7 +18,6 @@ class PowerView extends Component<Props> {
 
         this.state = {
             power: this.props.power,
-            event: this.props.event,
         }
     }
 
@@ -28,13 +26,7 @@ class PowerView extends Component<Props> {
     }
 
     deletePower = () => {
-        if (!this.state.power)
-            return;
 
-        let deleteMessage = deletePowerById(this.state.power.powerId).message;
-        ToastAndroid.show(deleteMessage, ToastAndroid.SHORT);
-        if (this.state.event)
-            this.state.event.emit('onDeletePower');
     }
 
     updatePower = () => {
@@ -42,7 +34,7 @@ class PowerView extends Component<Props> {
             return;
 
         const { navigate } = this.props.navigation;
-        navigate('UpdatePower', { power: this.state.power.clone(), event: this.state.event });
+        navigate('UpdatePower', { power: this.state.power.clone() });
     }
 
     render() {

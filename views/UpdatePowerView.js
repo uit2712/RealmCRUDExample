@@ -9,7 +9,6 @@
 import React, {Component} from 'react';
 import { StyleSheet, View, TextInput, Text, ToastAndroid } from 'react-native';
 import CustomButton from './CustomButton';
-import { updatePower } from '../controllers/PowerController';
 
 export default class UpdatePowerView extends Component<Props> {
 
@@ -30,7 +29,6 @@ export default class UpdatePowerView extends Component<Props> {
 
         this.state = {
             power: power,
-            event: event,
             disabledButtonUpdate: false,
         };
     }
@@ -50,12 +48,7 @@ export default class UpdatePowerView extends Component<Props> {
     }
 
     updatePower = () => {
-        let updatePowerResult = updatePower(this.state.power);
-        ToastAndroid.show(updatePowerResult.message, ToastAndroid.SHORT);
-        if (updatePowerResult.result) {
-            if (this.state.event)
-                this.state.event.emit('onUpdatePower');
-        }
+
     }
 
     render() {

@@ -8,11 +8,9 @@
 
 import React, { Component } from 'react';
 import { StyleSheet, View, ScrollView, ToastAndroid } from 'react-native';
-import { getAllPowers } from '../controllers/PowerController';
 import Power from '../models/Power';
 import PowerView from './PowerView';
 import CreatePowerView from './CreatePowerView';
-import EventEmitter from 'events';
 
 export default class ListPowersView extends Component<Props> {
 
@@ -26,22 +24,6 @@ export default class ListPowersView extends Component<Props> {
         this.state = {
             powers: [],
         };
-
-        this.updateEvent = new EventEmitter();
-    }
-
-    initPowers = () => {
-        this.setState({ powers: getAllPowers().result });
-    }
-
-    componentWillMount() {
-        this.initPowers();
-        this.updateEvent.addListener('onUpdatePower', () => this.initPowers());
-        this.updateEvent.addListener('onDeletePower', () => this.initPowers());
-    }
-
-    componentWillUnmount() {
-        this.updateEvent.removeAllListeners();
     }
 
     showListPowers = () => {

@@ -8,11 +8,9 @@
 
 import React, { Component } from 'react';
 import { StyleSheet, View, ScrollView, } from 'react-native';
-import { getAllHeroes } from '../controllers/HeroController';
 import Hero from '../models/Hero';
 import HeroView from './HeroView';
 import CreateHeroView from './CreateHeroView';
-import EventEmitter from 'events';
 
 export default class ListHeroesView extends Component<Props> {
 
@@ -26,22 +24,6 @@ export default class ListHeroesView extends Component<Props> {
         this.state = {
             heroes: [],
         };
-
-        this.event = new EventEmitter();
-    }
-
-    initHeroes = () => {
-        this.setState({ heroes: getAllHeroes().result });
-    }
-
-    componentWillMount() {
-        this.initHeroes();
-        this.event.addListener('onUpdateHero', () => this.initHeroes());
-        this.event.addListener('onDeleteHero', () => this.initHeroes());
-    }
-
-    componentWillUnmount() {
-        this.event.removeAllListeners();
     }
 
     showListHeroes = () => {

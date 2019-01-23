@@ -43,33 +43,16 @@ export default class UpdateHeroView extends Component<Props> {
     }
 
     initHeroPowersArray = () => {
-        if (!this.state.hero)
-            return;
 
-        let heroPowers = [];
-        for (let i = 0; i < this.state.hero.powers.length; i++) {
-            let powerId = this.state.hero.powers[i]['powerId'];
-            if (powerId != null && powerId != undefined)
-                heroPowers.push(powerId);
-        }
-
-
-        this.setState({ heroPowers });
     }
 
     initAllPowersArray = () => {
-        this.setState({ powers: getAllPowers().result });
+
     }
 
     componentWillMount() {
         this.initAllPowersArray();
         this.initHeroPowersArray();
-        this.event.addListener('onUpdatePicker', (pickerIndex, selectedValue) => this.updatePicker(pickerIndex, selectedValue));
-        this.event.addListener('onDeletePicker', (pickerIndex) => this.deletePicker(pickerIndex));
-    }
-
-    componentWillUnmount() {
-        this.event.removeAllListeners();
     }
 
     updatePicker = (pickerIndex: number, selectedValue: number) => {

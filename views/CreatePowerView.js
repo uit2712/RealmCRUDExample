@@ -17,7 +17,6 @@ import {
 } from 'react-native';
 import CustomButton from './CustomButton';
 import Power from '../models/Power';
-import { createNewPower } from '../controllers/PowerController';
 
 export default class CreatePowerView extends Component<Props> {
     constructor(props: Props) {
@@ -44,16 +43,7 @@ export default class CreatePowerView extends Component<Props> {
     }
 
     createPower = () => {
-        if (!this.state.power || this.state.disableButtonAdd)
-            return;
 
-        let createPowerResult = createNewPower(this.state.power);
-        ToastAndroid.show(createPowerResult.message, ToastAndroid.SHORT);
-        if (createPowerResult.result) {
-            this.resetPowerInfo();
-            if (this.state.event)
-                this.state.event.emit('onUpdatePower');
-        }
     }
 
     render() {

@@ -17,7 +17,6 @@ import {
 } from 'react-native';
 import CustomButton from './CustomButton';
 import Hero from '../models/Hero';
-import { createNewHero } from '../controllers/HeroController';
 
 export default class CreateHeroView extends Component<Props> {
     constructor(props: Props) {
@@ -25,7 +24,6 @@ export default class CreateHeroView extends Component<Props> {
 
         this.state = {
             hero: new Hero(),
-            event: this.props.event,
             disableButtonAdd: true,
         }
     }
@@ -44,16 +42,7 @@ export default class CreateHeroView extends Component<Props> {
     }
 
     createHero = () => {
-        if (!this.state.hero || this.state.disableButtonAdd)
-            return;
 
-        let createHeroResult = createNewHero(this.state.hero);
-        ToastAndroid.show(createHeroResult.message, ToastAndroid.SHORT);
-        if (createHeroResult.result) {
-            this.resetHeroInfo();
-            if (this.state.event)
-                this.state.event.emit('onUpdateHero');
-        }
     }
 
     render() {
