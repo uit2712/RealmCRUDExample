@@ -10,10 +10,6 @@ import React, { Component } from 'react';
 import { StyleSheet, View, TextInput, Text, ToastAndroid } from 'react-native';
 import CustomButton from './CustomButton';
 import CustomPicker from './CustomPicker';
-import { getAllPowers, getPowerById } from '../controllers/PowerController';
-import { updateHero } from '../controllers/HeroController';
-import EventEmitter from 'events';
-import Hero from '../models/Hero';
 
 export default class UpdateHeroView extends Component<Props> {
 
@@ -38,7 +34,6 @@ export default class UpdateHeroView extends Component<Props> {
             disabledButtonUpdate: false,
         };
 
-        this.event = new EventEmitter();
         this.currentPickerIndex = 0;
     }
 
